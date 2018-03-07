@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/RenderDemo/RenderDemo.iml" filepath="$PROJECT_DIR$/RenderDemo/RenderDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SRPAAS_Render.iml" filepath="$PROJECT_DIR$/SRPAAS_Render.iml" />
+      <module fileurl="file://$PROJECT_DIR$/srpaas_render/srpaas_render.iml" filepath="$PROJECT_DIR$/srpaas_render/srpaas_render.iml" />
+    </modules>
+  </component>
+</project>

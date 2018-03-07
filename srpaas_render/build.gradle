@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+def SDK_BASENAME = "srpaas_render";
+def SDK_VERSION = "0.1.0";
+android {
+    compileSdkVersion COMPILE_SDK_VERSION
+    buildToolsVersion BUILD_TOOL_VERSION
+
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+        versionCode VERSION_CODE
+        versionName SDK_VERSION
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+def sdkDestinationPath = "/";
+def zipFile = file('build/intermediates/bundles/release/classes.jar')
+def aarPath = 'build/outputs/aar/';
+def JAR_NAME = SDK_BASENAME + "_v";
+
+task deleteBuild(type: Delete) {
+    delete sdkDestinationPath + JAR_NAME + SDK_VERSION + ".jar"
+    delete sdkDestinationPath + JAR_NAME + SDK_VERSION + ".aar"
+}
+
+task makeJar(type: Jar) {
+    from zipTree(zipFile)
+    from fileTree(dir: 'src/main', includes: ['assets/**'])
+    baseName = JAR_NAME + SDK_VERSION
+    destinationDir = file(sdkDestinationPath)
+    exclude "org/suirui/**/**/BuildConfig.class"
+    exclude "org/suirui/**/**/BuildConfig\$*.class"
+    exclude "**/R.class"
+    exclude "**/R\$*.class"
+    //只导入资源路径集下的部分资源
+//    include "lbs/**/*.class"
+    include "org/suirui/**/**/*.class"
+}
+
+task makeAar(type: Copy) {
+    from(aarPath)
+    into(sdkDestinationPath)
+    include('srpaas_render-release.aar')
+    rename('srpaas_render-release.aar', JAR_NAME + SDK_VERSION + '.aar')
+}
+
+makeJar.dependsOn(deleteBuild, build, makeAar)
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:24.2.1'
+}
